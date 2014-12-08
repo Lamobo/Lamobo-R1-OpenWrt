@@ -68,7 +68,10 @@ define uboot/Linksprite_pcDuino3
   TITLE:=U-Boot 2014.04 for Linksprite pcDuino3
 endef  
 
-UBOOTS:=A10-OLinuXino-Lime A13-OLinuXino A20-OLinuXino_MICRO Bananapi Cubieboard Cubieboard2 Cubietruck Hackberry pcDuino Linksprite_pcDuino3 OLIMEX-A13-SOM
+define uboot/Lamobo-R1
+  TITLE:=U-Boot 2014.04 for Lamobo R1
+endef
+UBOOTS:=A10-OLinuXino-Lime A13-OLinuXino A20-OLinuXino_MICRO Bananapi Cubieboard Cubieboard2 Cubietruck Hackberry pcDuino Linksprite_pcDuino3 OLIMEX-A13-SOM Lamobo-R1
 
 define Package/uboot/template
 define Package/uboot-sunxi-$(1)

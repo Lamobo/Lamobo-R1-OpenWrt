@@ -1,0 +1,33 @@
+--- a/boards.cfg
++++ b/boards.cfg
+@@ -393,6 +393,7 @@ Active  arm         armv7          sunxi
+ Active  arm         armv7          sunxi       -               sunxi               ba10_tv_box                          sun4i:BA10_TV_BOX,SPL,SUNXI_EMAC                                                                                                  -
+ Active  arm         armv7          sunxi       -               sunxi               Bananapi                             sun7i:BANANAPI,SPL,SUNXI_GMAC,RGMII,MACPWR=SUNXI_GPH(23),STATUSLED=244,STATUSLED1=245,FAST_MBUS                                   -
+ Active  arm         armv7          sunxi       -               sunxi               Bananapi_FEL                         sun7i:BANANAPI,SPL_FEL,SUNXI_GMAC,RGMII,MACPWR=SUNXI_GPH(23),STATUSLED=244,STATUSLED1=245,FAST_MBUS                               -
++Active  arm         armv7          sunxi       -               sunxi               Lamobo-R1                            sun7i:LAMOBO_R1,SPL,SUNXI_GMAC,RGMII,MACPWR=SUNXI_GPH(23),STATUSLED=244,STATUSLED1=245,FAST_MBUS                                   -
+ Active  arm         armv7          sunxi       -               sunxi               Coby_MID7042                         sun4i:COBY_MID7042,SPL                                                                                                            -
+ Active  arm         armv7          sunxi       -               sunxi               Coby_MID8042                         sun4i:COBY_MID8042,SPL                                                                                                            -
+ Active  arm         armv7          sunxi       -               sunxi               Coby_MID9742                         sun4i:COBY_MID9742,SPL                                                                                                            -
+--- a/board/sunxi/Makefile
++++ b/board/sunxi/Makefile
+@@ -33,6 +33,7 @@ obj-$(CONFIG_MARSBOARD_A20)	+= dram_sun4
+ obj-$(CONFIG_CUBIEBOARD)	+= dram_cubieboard.o
+ obj-$(CONFIG_CUBIEBOARD2)	+= dram_sun7i_460_1024_iow16.o
+ obj-$(CONFIG_BANANAPI)		+= dram_sun7i_432_1024_iow16.o
++obj-$(CONFIG_LAMOBO_R1)		+= dram_sun7i_432_1024_iow16.o
+ obj-$(CONFIG_CUBIETRUCK)	+= dram_cubietruck.o
+ obj-$(CONFIG_DNS_M82)		+= dram_sun4i_360_1024_iow16.o
+ obj-$(CONFIG_EOMA68_A10)	+= dram_sun4i_360_1024_iow8.o
+--- a/board/sunxi/gmac.c
++++ b/board/sunxi/gmac.c
+@@ -33,6 +33,10 @@ int sunxi_gmac_initialize(bd_t *bis)
+ 	setbits_le32(&ccm->gmac_clk_cfg, 0x3 << 10);
+ #endif
+ 
++#ifdef CONFIG_LAMOBO_R1
++	setbits_le32(&ccm->gmac_clk_cfg, 0x3 << 10);
++#endif
++
+ 	/* Configure pin mux settings for GMAC */
+ 	for (pin = SUNXI_GPA(0); pin <= SUNXI_GPA(16); pin++) {
+ #ifdef CONFIG_RGMII

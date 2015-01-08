@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=busybox
 PKG_VERSION:=1.22.1
-PKG_RELEASE:=2
+PKG_RELEASE:=5
 PKG_FLAGS:=essential
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -21,7 +21,7 @@ PKG_BUILD_DEPENDS:=BUSYBOX_USE_LIBRPC:librpc BUSYBOX_CONFIG_PAM:libpam
 PKG_BUILD_PARALLEL:=1
 PKG_CHECK_FORMAT_SECURITY:=0
 
-PKG_LICENSE:=GPLv2 BSD-4c
+PKG_LICENSE:=GPL-2.0
 PKG_LICENSE_FILES:=LICENSE archival/libarchive/bz/LICENSE
 
 include $(INCLUDE_DIR)/package.mk
@@ -116,6 +116,7 @@ define Package/busybox/install
 	$(INSTALL_BIN) ./files/cron $(1)/etc/init.d/cron
 	$(INSTALL_BIN) ./files/telnet $(1)/etc/init.d/telnet
 	$(INSTALL_BIN) ./files/sysntpd $(1)/etc/init.d/sysntpd
+	$(INSTALL_BIN) ./files/ntpd-hotplug $(1)/usr/sbin/ntpd-hotplug
 	-rm -rf $(1)/lib64
 endef
 

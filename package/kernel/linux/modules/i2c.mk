@@ -32,7 +32,6 @@ endif
 
 define KernelPackage/i2c-core
   $(call i2c_defaults,$(I2C_CORE_MODULES),51)
-  AUTOLOAD:=
   TITLE:=I2C support
 endef
 
@@ -169,6 +168,28 @@ define KernelPackage/i2c-tiny-usb/description
 endef
 
 $(eval $(call KernelPackage,i2c-tiny-usb))
+
+
+I2C_PIIX4_MODULES:= \
+  CONFIG_I2C_PIIX4:drivers/i2c/busses/i2c-piix4
+
+define KernelPackage/i2c-piix4
+  $(call i2c_defaults,$(I2C_PIIX4_MODULES),59)
+  TITLE:=Intel PIIX4 and compatible I2C interfaces
+  DEPENDS:=@PCI_SUPPORT @(x86||x86_64) kmod-i2c-core
+endef
+
+define KernelPackage/i2c-piix4/description
+ Support for the Intel PIIX4 family of mainboard I2C interfaces,
+ specifically Intel PIIX4, Intel 440MX, ATI IXP200, ATI IXP300,
+ ATI IXP400, ATI SB600, ATI SB700/SP5100, ATI SB800, AMD Hudson-2,
+ AMD ML, AMD CZ, Serverworks OSB4, Serverworks CSB5,
+ Serverworks CSB6, Serverworks HT-1000, Serverworks HT-1100 and
+ SMSC Victory66.
+endef
+
+$(eval $(call KernelPackage,i2c-piix4))
+
 
 I2C_MUX_MODULES:= \
   CONFIG_I2C_MUX:drivers/i2c/i2c-mux

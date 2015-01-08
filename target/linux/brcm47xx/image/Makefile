@@ -21,6 +21,7 @@ define Image/Prepare
 	gzip -nc9 $(KDIR)/vmlinux > $(KDIR)/vmlinux.gz
 ifneq ($(CONFIG_TARGET_ROOTFS_INITRAMFS),)
 	cat $(KDIR)/vmlinux-initramfs | $(STAGING_DIR_HOST)/bin/lzma e -si -so -eos -lc1 -lp2 -pb2 > $(KDIR)/vmlinux-initramfs.lzma
+	$(STAGING_DIR_HOST)/bin/lzma e -so -d16 $(KDIR)/vmlinux-initramfs > $(KDIR)/vmlinux-initramfs-nodictionary.lzma
 endif
 	rm -f $(KDIR)/loader.gz
 	$(MAKE) -C lzma-loader \
@@ -180,8 +181,11 @@ endef
 #################################################
 
 define Image/Build/mips74k/devices-with-64k-blocks
+	$(call Image/Build/Chk,$(1),wgr614_v10_north_america,U12H139T01_NETGEAR,2,$(patsubst jffs2-%,jffs2,$(1)))
+	$(call Image/Build/Chk,$(1),wgr614_v10_other_regions,U12H139T01_NETGEAR,1,$(patsubst jffs2-%,jffs2,$(1)))
 	$(call Image/Build/Chk,$(1),wndr3400_v1,U12H155T00_NETGEAR,2,$(patsubst jffs2-%,jffs2,$(1)))
 	$(call Image/Build/Chk,$(1),wndr3400_v2,U12H187T00_NETGEAR,2,$(patsubst jffs2-%,jffs2,$(1)))
+	$(call Image/Build/Chk,$(1),wndr3400_v3,U12H208T00_NETGEAR,1,$(patsubst jffs2-%,jffs2,$(1)))
 	$(call Image/Build/Chk,$(1),wndr3700_v3,U12H194T00_NETGEAR,2,$(patsubst jffs2-%,jffs2,$(1)))
 	$(call Image/Build/Chk,$(1),wndr4000,U12H181T00_NETGEAR,2,$(patsubst jffs2-%,jffs2,$(1)))
 	$(call Image/Build/Chk,$(1),wnr1000_v3,U12H139T00_NETGEAR,2,$(patsubst jffs2-%,jffs2,$(1)))
@@ -228,6 +232,7 @@ endef
 
 define Image/Build/Initramfs
 	$(STAGING_DIR_HOST)/bin/trx -o $(BIN_DIR)/$(IMG_PREFIX)-initramfs.trx -f $(KDIR)/loader.gz -f $(KDIR)/vmlinux-initramfs.lzma
+	$(STAGING_DIR_HOST)/bin/trx -o $(BIN_DIR)/$(IMG_PREFIX)-initramfs-noloader-nodictionary.trx -f $(KDIR)/vmlinux-initramfs-nodictionary.lzma
 endef
 
 # $(1): filesystem type.

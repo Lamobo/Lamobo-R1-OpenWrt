@@ -41,6 +41,7 @@ BINUTILS_CONFIGURE:= \
 		--host=$(GNU_HOST_NAME) \
 		--target=$(REAL_GNU_TARGET_NAME) \
 		--with-sysroot=$(TOOLCHAIN_DIR) \
+		--enable-plugins \
 		--disable-multilib \
 		--disable-werror \
 		--disable-nls \
@@ -63,8 +64,9 @@ endif
 
 define Host/Prepare
 	$(call Host/Prepare/Default)
-	ln -snf $(PKG_NAME)-$(PKG_VERSION) $(BUILD_DIR_TOOLCHAIN)/$(PKG_NAME)
+	ln -snf $(notdir $(HOST_BUILD_DIR)) $(BUILD_DIR_TOOLCHAIN)/$(PKG_NAME)
 	$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(HOST_BUILD_DIR)/
+	$(SED) 's, " Linaro.*,,' $(HOST_BUILD_DIR)/bfd/version.h
 endef
 
 define Host/Configure
@@ -82,9 +84,11 @@ define Host/Install
 	$(MAKE) -C $(HOST_BUILD_DIR) \
 		prefix=$(TOOLCHAIN_DIR)/initial \
 		install
+	$(MAKE) -C $(HOST_BUILD_DIR) \
+		prefix=$(TOOLCHAIN_DIR) \
+		install
 	$(call FixupLibdir,$(TOOLCHAIN_DIR)/initial)
 	$(RM) $(TOOLCHAIN_DIR)/initial/lib/libiberty.a
-	$(CP) $(TOOLCHAIN_DIR)/initial/. $(TOOLCHAIN_DIR)/
 	$(CP) $(TOOLCHAIN_DIR)/bin/$(REAL_GNU_TARGET_NAME)-readelf $(REAL_STAGING_DIR_HOST)/bin/readelf
 endef
 

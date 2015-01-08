@@ -140,7 +140,7 @@ EOF
 
 ucidef_commit_leds()
 {
-	[ "$UCIDEF_LEDS_CHANGED" == "1" ] && uci commit system
+	[ "$UCIDEF_LEDS_CHANGED" = "1" ] && uci commit system
 }
 
 ucidef_set_interface_loopback() {
@@ -190,7 +190,7 @@ set network.wan='interface'
 set network.wan.ifname='$ifname'
 set network.wan.proto='dhcp'
 set network.wan6='interface'
-set network.wan6.ifname='@wan'
+set network.wan6.ifname='$ifname'
 set network.wan6.proto='dhcpv6'
 EOF
 }

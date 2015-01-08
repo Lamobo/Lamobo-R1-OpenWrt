@@ -8,18 +8,18 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=procd
-PKG_VERSION:=2014-10-06
+PKG_VERSION:=2014-12-15
 
 PKG_RELEASE=$(PKG_SOURCE_VERSION)
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://nbd.name/luci2/procd.git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=f45672d80bf2fec4ccb7363de1da6adb9e3f4421
+PKG_SOURCE_VERSION:=61cfe0d093056b85a311f06d44ac149e5dbb4d1a
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
 CMAKE_INSTALL:=1
 
-PKG_LICENSE:=GPLv2
+PKG_LICENSE:=GPL-2.0
 PKG_LICENSE_FILES:=
 
 PKG_MAINTAINER:=John Crispin <blogic@openwrt.org>
@@ -43,6 +43,39 @@ define Package/procd-nand
   TITLE:=OpenWrt sysupgrade nand helper
 endef
 
+define Package/procd-nand-firstboot
+  SECTION:=utils
+  CATEGORY:=Utilities
+  DEPENDS:=procd-nand
+  TITLE:=OpenWrt firstboot nand helper
+endef
+
+define Package/procd/config
+menu "Configuration"
+	depends on PACKAGE_procd
+
+config PROCD_SHOW_BOOT
+	bool
+	default n
+	prompt "Print the shutdown to the console as well as logging it to syslog"
+
+config PROCD_ZRAM_TMPFS
+	bool
+	default n
+	prompt "Mount /tmp using zram."
+endmenu
+endef
+
+PKG_CONFIG_DEPENDS:= PROCD_SHOW_BOOT PROCD_ZRAM_TMPFS
+
+ifeq ($(CONFIG_PROCD_SHOW_BOOT),y)
+  CMAKE_OPTIONS += -DSHOW_BOOT_ON_CONSOLE=1
+endif
+
+ifeq ($(CONFIG_PROCD_ZRAM_TMPFS),y)
+  CMAKE_OPTIONS += -DZRAM_TMPFS=1
+endif
+
 define Package/procd/install
 	$(INSTALL_DIR) $(1)/sbin $(1)/etc $(1)/lib/functions
 
@@ -59,5 +92,12 @@ define Package/procd-nand/install
 	$(INSTALL_DATA) ./files/nand.sh $(1)/lib/upgrade/
 endef
 
+define Package/procd-nand-firstboot/install
+	$(INSTALL_DIR) $(1)/lib/preinit
+
+	$(INSTALL_DATA) ./files/nand-preinit.sh $(1)/lib/preinit/60-nand-firstboot.sh
+endef
+
 $(eval $(call BuildPackage,procd))
 $(eval $(call BuildPackage,procd-nand))
+$(eval $(call BuildPackage,procd-nand-firstboot))

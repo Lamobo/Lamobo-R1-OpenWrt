@@ -12,6 +12,12 @@ get_status_led() {
 	3g300m | w150m)
 		status_led="tenda:blue:ap"
 		;;
+	ai-br100)
+		status_led="aigale:blue:wlan"
+		;;
+	ar670w)
+		status_led="ar670w:green:power"
+		;;
 	ar725w)
 		status_led="ar725w:green:power"
 		;;
@@ -44,6 +50,9 @@ get_status_led() {
 		;;
 	dap-1350)
 		status_led="d-link:blue:power"
+		;;
+	e1700)
+		status_led="linksys:green:power"
 		;;
 	esr-9753)
 		status_led="esr-9753:orange:power"
@@ -164,8 +173,18 @@ get_status_led() {
 	wr8305rt)
 		status_led="wr8305rt:sys"
 		;;
+	wsr-600 | \
+	wsr-1166)
+		status_led="buffalo:orange:diag"
+		;;
 	wnce2001)
 		status_led="netgear:green:power"
+		;;
+	nexx-wt1520)
+		status_led="nexx-wt1520:white:power"
+		;;
+	nexx-wt3020)
+		status_led="nexx:blue:power"
 		;;
 	mzk-w300nh2)
 		status_led="mzkw300nh2:green:power"
@@ -207,6 +226,9 @@ set_state() {
 		;;
 	failsafe)
 		status_led_blink_failsafe
+		;;
+	preinit_regular)
+		status_led_blink_preinit_regular
 		;;
 	done)
 		status_led_on

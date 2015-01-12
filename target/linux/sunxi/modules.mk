@@ -102,3 +102,24 @@ endef
 
 $(eval $(call KernelPackage,wdt-sunxi))
 
+define KernelPackage/b53
+  SUBMENU:=$(NETWORK_DEVICES_MENU)
+  TITLE:=B53 switch support
+  DEPENDS:=@TARGET_sunxi +kmod-swconfig
+  KCONFIG:=\
+    CONFIG_STMMAC_ETH \
+    CONFIG_B53=m \
+    CONFIG_B53_PHY_DRIVER=m \
+    CONFIG_B53_PHY_FIXUP=y
+  FILES:=\
+    $(LINUX_DIR)/drivers/net/phy/b53/b53_common.ko \
+    $(LINUX_DIR)/drivers/net/phy/b53/b53_mdio.ko \
+    $(LINUX_DIR)/drivers/net/ethernet/stmicro/stmmac/stmmac.ko
+    AUTOLOAD:=$(call AutoLoad,45,$(notdir stmmac b53_common b53_mdio))
+endef
+
+define KernelPackage/b53/description
+ Kernel modules for Broadcom b53 serial support
+endef
+
+$(eval $(call KernelPackage,b53))

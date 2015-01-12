@@ -12,7 +12,7 @@ USING_EXTERNAL_KERNEL=y
 define Profile/Lamobo-R1
 	NAME:=Lamobo R1
 	PACKAGES:=\
-		uboot-sunxi-Lamobo-R1 ata-sunxi kmod-sunxi-gmac kmod-net-rtl8188eu kmod-rtl8192cu kmod-b53 kmod-swconfig
+		uboot-sunxi-Lamobo-R1 ata-sunxi kmod-sunxi-gmac kmod-net-rtl8188eu kmod-rtl8192cu kmod-b53 kmod-swconfig swconfig
 endef
 
 define Profile/Lamobo-R1/Description

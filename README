@@ -1,5 +1,3 @@
-[![Build Status](https://drone.io/github.com/Lamobo/Lamobo-R1-OpenWrt/status.png)](https://drone.io/github.com/Lamobo/Lamobo-R1-OpenWrt/latest)
-
 This is the buildsystem for the OpenWrt Linux distribution.
 
 Please use "make menuconfig" to configure your appreciated
